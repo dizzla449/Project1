@@ -19,8 +19,8 @@ public class BoundingBox {
 		setY(y);
 	}
 	public BoundingBox(Image img, float x, float y) {
-		width = img.getWidth();
-		height = img.getHeight();
+		width = img.getWidth()*0.75f;
+		height = img.getHeight()*0.75f;
 		setX(x);
 		setY(y);
 	}

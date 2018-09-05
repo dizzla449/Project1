@@ -15,16 +15,32 @@ public class Player extends Sprite {
 	
 	//Update will handle the arrow key input
 	public void update(Input input, int delta) {
-	
-	
+		// Accept Key Inputs and alter coordinates
+		movePlayer(input);
+		//Check if new coordinates within bounds
+		boundsCheck();
 	}
 	
+	private void movePlayer(Input input) {
+		float dx = 0f;
+		float dy = 0f;
+		if (input.isKeyPressed(Input.KEY_UP)) {
+				dy -=48f;
+		} if (input.isKeyPressed(Input.KEY_DOWN)) {
+			dy +=48f;
+		} if (input.isKeyPressed(Input.KEY_RIGHT)) {
+			dx +=48f;
+		} if (input.isKeyPressed(Input.KEY_LEFT)) {
+			dx -=48f;
+		}
+		setX(getX()+dx);
+		setY(getY()+dy);
+	}
 	
-	
-	
-	
-	//Render image and does nothing else
-	public void render() {
-		
+	private void boundsCheck() {
+		setX(Math.max(getX(), 0));
+		setX(Math.min(getX(), App.SCREEN_WIDTH));
+		setY(Math.max(getY(), 0));
+		setY(Math.min(getY(), App.SCREEN_HEIGHT));
 	}
 }

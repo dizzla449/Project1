@@ -2,6 +2,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import java.util.ArrayList;
+
 
 public class World {
 	
@@ -9,6 +11,7 @@ public class World {
 	Image grassTile;
 	private final static String WATER_TILE_PATH = "assets/water.png";
 	private final static String GRASS_TILE_PATH = "assets/grass.png";
+	private ArrayList<Sprite> sprites = new ArrayList<>();
 	
 	
 	public World() {
@@ -23,6 +26,19 @@ public class World {
 		 * create background here
 		 * CREATE ALL SPRITES
 		 * */
+		sprites.add(new Player());
+		for (int i=0; i<4; i++) {
+			sprites.add(new Vehicle(48+i*312, 432));
+		} for (int i=0; i<5; i++) {
+			sprites.add(new Vehicle(i*240, 480));
+		} sprites.add(new Vehicle(64, 528));
+		sprites.add(new Vehicle(640, 528));
+		for (int i=0; i<5; i++) {
+			sprites.add(new Vehicle(128 + 240*i, 576));
+		} for (int i=0; i<4; i++) {
+			sprites.add(new Vehicle(250 + i*312, 624));
+		}
+		
 		
 	}
 	
@@ -31,10 +47,22 @@ public class World {
 	//Then iterate again with another loop for collision updates.
 	public void update(Input input, int delta) {
 		// Update all of the sprites in the game
+		for(Sprite i: sprites) {
+			i.update(input, delta);
+		}
+		for (int i=1; i<sprites.size(); i++) {
+			if (sprites.get(0).intersects(sprites.get(i))) {
+				System.exit(0);
+			}
+		}
 		/*
 		 * Create a method with a sprite array input to update all vehicles
 		 * Create an update method in the player subclass
 		 */
+		if (input.isKeyDown(Input.KEY_ESCAPE)) {
+			System.exit(0);
+		}
+		
 	}
 	
 	
@@ -53,5 +81,8 @@ public class World {
 		/*
 		 * Create a method to iterate though sprite array of vehicless
 		 */
+		for(Sprite i: sprites) {
+			i.render();
+		}
 	}
 }
