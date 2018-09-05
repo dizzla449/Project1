@@ -6,16 +6,36 @@ import java.util.ArrayList;
 
 
 public class World {
-	
-	Image waterTile;
-	Image grassTile;
+	/*
+	 * CONSTANTS DEFINED BELOW \/ \/ \/ \/
+	 */
 	private final static String WATER_TILE_PATH = "assets/water.png";
 	private final static String GRASS_TILE_PATH = "assets/grass.png";
+	private final static float OFFSET_1 = 48f;
+	private final static float OFFSET_2 = 0f;
+	private final static float OFFSET_3 = 64f;
+	private final static float OFFSET_4 = 128f;
+	private final static float OFFSET_5 = 250f;
+	private final static float SEPERATION1 = 6.5f*48;
+	private final static float SEPERATION2 = 5f*48;
+	private final static float SEPERATION3 = 12f*48;
+	private final static float SEPERATION4 = 5f*48;
+	private final static float SEPERATION5 = 6.5f*48;
+	private final static float BUS_Y_LOCATION1 = 432f;
+	private final static float BUS_Y_LOCATION2 = 480f;
+	private final static float BUS_Y_LOCATION3 = 528f;
+	private final static float BUS_Y_LOCATION4 = 576f;
+	private final static float BUS_Y_LOCATION5 = 624f;
+	
+	//Other Instance Variables also initialized 
+	Image waterTile;
+	Image grassTile;
 	private ArrayList<Sprite> sprites = new ArrayList<>();
 	
 	
 	public World() {
 		// Perform initialization logic
+		//Background Initialized below
 		try {
 			waterTile = new Image(WATER_TILE_PATH);
 			grassTile = new Image(GRASS_TILE_PATH);
@@ -23,51 +43,55 @@ public class World {
 			e.printStackTrace();
 		}
 		/*
-		 * create background here
-		 * CREATE ALL SPRITES
-		 * */
+		 * ALL SPRITES INITIALISED BELOW \/ \/ \/ \/ \/ \/ \/
+		 */
+		// Add Player Sprite first in ArrayList
 		sprites.add(new Player());
+		
+		
+		//Add all 20 Vehicle Sprites to ArrayList
 		for (int i=0; i<4; i++) {
-			sprites.add(new Vehicle(48+i*312, 432));
-		} for (int i=0; i<5; i++) {
-			sprites.add(new Vehicle(i*240, 480));
-		} sprites.add(new Vehicle(64, 528));
-		sprites.add(new Vehicle(640, 528));
+			sprites.add(new Vehicle(OFFSET_1 + SEPERATION1*i, BUS_Y_LOCATION1));
+		} 
 		for (int i=0; i<5; i++) {
-			sprites.add(new Vehicle(128 + 240*i, 576));
-		} for (int i=0; i<4; i++) {
-			sprites.add(new Vehicle(250 + i*312, 624));
-		}
+			sprites.add(new Vehicle(OFFSET_2+i*SEPERATION2, BUS_Y_LOCATION2));
+		} 
 		
+		sprites.add(new Vehicle(OFFSET_3, BUS_Y_LOCATION3));
+		sprites.add(new Vehicle(OFFSET_3 + SEPERATION3, BUS_Y_LOCATION3));
 		
+		for (int i=0; i<5; i++) {
+			sprites.add(new Vehicle(OFFSET_4 + SEPERATION4*i, BUS_Y_LOCATION4));
+		} 
+		for (int i=0; i<4; i++) {
+			sprites.add(new Vehicle(OFFSET_5 + i*SEPERATION5, BUS_Y_LOCATION5));
+		}		
 	}
 	
 	
-	//Iterate through sprite list for movement updates
-	//Then iterate again with another loop for collision updates.
+	//Need to update sprites ArrayList for movement and also check for collisions.
 	public void update(Input input, int delta) {
-		// Update all of the sprites in the game
+		// Update all sprites movement.
 		for(Sprite i: sprites) {
 			i.update(input, delta);
 		}
+		
+		//Check player (first element) has collided with any other sprites(vehicles), and if so exit App.
 		for (int i=1; i<sprites.size(); i++) {
-			if (sprites.get(0).intersects(sprites.get(i))) {
+			if (sprites.get(0).contactSprite(sprites.get(i))) {
 				System.exit(0);
 			}
 		}
-		/*
-		 * Create a method with a sprite array input to update all vehicles
-		 * Create an update method in the player subclass
-		 */
+		//Quick escape enabled by with ESCAPE Key
 		if (input.isKeyDown(Input.KEY_ESCAPE)) {
 			System.exit(0);
 		}
-		
 	}
 	
 	
-	//Iterate through sprite list to render
+	//Iterate through sprite list to render each sprites updated coordinates
 	public void render(Graphics g) {
+		
 		//Render Tiles in correct position 
 		for (int i=0 ; i<7 ; i++) {
 			for (int j=0; j<22; j++) {
@@ -77,10 +101,8 @@ public class World {
 			grassTile.drawCentered(24 + i*48, 384);
 			grassTile.drawCentered(24 + 48*i, 672);
 		}
+		
 		// Draw all of the sprites in the game
-		/*
-		 * Create a method to iterate though sprite array of vehicless
-		 */
 		for(Sprite i: sprites) {
 			i.render();
 		}
