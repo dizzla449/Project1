@@ -4,7 +4,9 @@ public class Vehicle extends Sprite{
 	
 	//Defining Constants for the class.
 	public final static String BUS_IMAGE_PATH = "assets/bus.png";
-	public final static float SPEED = 0.15f;
+	public final static float BUS_SPEED = 0.15f;
+	private final static float ROAD_EDGE_EAST = 1200f;
+	private final static float ROAD_EDGE_WEST = -30f;
 	
 	
 	
@@ -18,9 +20,9 @@ public class Vehicle extends Sprite{
 	//WestTravelling determines which direction the bus is traveling. 
 	public void update(Input input, int delta) {
 		if (westTravelling()) {
-			setX(getX()-SPEED*delta);
+			setX(getX()-BUS_SPEED*delta);
 		} else {
-			setX(getX()+SPEED*delta);
+			setX(getX()+BUS_SPEED*delta);
 		}
 		//Checks to see if the bus is off the screen and repositions it at the beginning.
 		reposition();
@@ -28,7 +30,7 @@ public class Vehicle extends Sprite{
 	
 	// West or east moving bus?
 	private boolean westTravelling() {
-		if (getY()==432f || getY()==528f || getY()==624f) {
+		if (getY()==World.BUS_Y_LOCATION1 || getY()==World.BUS_Y_LOCATION3 || getY()==World.BUS_Y_LOCATION5) {
 			return true;
 		} return false;
 	}
@@ -36,10 +38,10 @@ public class Vehicle extends Sprite{
 	//Checks to see if bus is at the end of the screen and needs to be reset at the beginning.
 	private void reposition(){
 		if (westTravelling()) {
-			if (getX()<-30f) { setX(1200f);}
+			if (getX()<ROAD_EDGE_WEST) { setX(ROAD_EDGE_EAST);}
 		}
 		else {
-			if (getX()>1088f) { setX(-30f);}
+			if (getX()>ROAD_EDGE_EAST) { setX(ROAD_EDGE_WEST);}
 		}
 	}
 	

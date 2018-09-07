@@ -11,6 +11,8 @@ public class BoundingBox {
 	private float top;
 	private float width;
 	private float height;
+	public final static float BOUNDINGBOX_HEIGHT_CONTRACTION_FACTOR = 0.75f;
+	public final static float BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR = 0.75f;
 	
 	public BoundingBox(float x, float y, float width, float height) {
 		this.width = width;
@@ -19,8 +21,8 @@ public class BoundingBox {
 		setY(y);
 	}
 	public BoundingBox(Image img, float x, float y) {
-		width = img.getWidth()*0.75f;
-		height = img.getHeight()*0.75f;
+		width = img.getWidth()*BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR;
+		height = img.getHeight()*BOUNDINGBOX_HEIGHT_CONTRACTION_FACTOR;
 		setX(x);
 		setY(y);
 	}

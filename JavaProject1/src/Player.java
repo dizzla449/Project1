@@ -6,7 +6,6 @@ public class Player extends Sprite {
 	private final static String FROG_IMAGE_PATH = "assets/frog.png";
 	private final static float INITIAL_X = 512f;
 	private final static float INITIAL_Y = 720f;
-	private final static float EDGE_OF_WATER = 360f;
 	
 	
 	//Constructor to define Player Sprite just uses super constructor.
@@ -25,7 +24,7 @@ public class Player extends Sprite {
 		//Check if new coordinates within bounds
 		boundsCheck();
 		//Check if player is in the water, if so the App is exited.
-		if (getY() < EDGE_OF_WATER) {
+		if (getY() < World.EDGE_OF_WATER) {
 			System.exit(0);
 		}
 	}
@@ -35,13 +34,13 @@ public class Player extends Sprite {
 		float dx = 0f;
 		float dy = 0f;
 		if (input.isKeyPressed(Input.KEY_UP)) {
-				dy -=48f;
+				dy -= World.TILE_LENGTH;
 		} if (input.isKeyPressed(Input.KEY_DOWN)) {
-			dy +=48f;
+			dy += World.TILE_LENGTH;
 		} if (input.isKeyPressed(Input.KEY_RIGHT)) {
-			dx +=48f;
+			dx += World.TILE_LENGTH;
 		} if (input.isKeyPressed(Input.KEY_LEFT)) {
-			dx -=48f;
+			dx -= World.TILE_LENGTH;
 		}
 		
 		//Update Coordinates in Sprite parent class.

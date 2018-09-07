@@ -11,21 +11,27 @@ public class World {
 	 */
 	private final static String WATER_TILE_PATH = "assets/water.png";
 	private final static String GRASS_TILE_PATH = "assets/grass.png";
-	private final static float OFFSET_1 = 48f;
-	private final static float OFFSET_2 = 0f;
-	private final static float OFFSET_3 = 64f;
-	private final static float OFFSET_4 = 128f;
-	private final static float OFFSET_5 = 250f;
-	private final static float SEPERATION1 = 6.5f*48;
-	private final static float SEPERATION2 = 5f*48;
-	private final static float SEPERATION3 = 12f*48;
-	private final static float SEPERATION4 = 5f*48;
-	private final static float SEPERATION5 = 6.5f*48;
-	private final static float BUS_Y_LOCATION1 = 432f;
-	private final static float BUS_Y_LOCATION2 = 480f;
-	private final static float BUS_Y_LOCATION3 = 528f;
-	private final static float BUS_Y_LOCATION4 = 576f;
-	private final static float BUS_Y_LOCATION5 = 624f;
+	public final static float OFFSET_1 = 48f;
+	public final static float OFFSET_2 = 0f;
+	public final static float OFFSET_3 = 64f;
+	public final static float OFFSET_4 = 128f;
+	public final static float OFFSET_5 = 250f;
+	public final static float SEPERATION1 = 6.5f*48;
+	public final static float SEPERATION2 = 5f*48;
+	public final static float SEPERATION3 = 12f*48;
+	public final static float SEPERATION4 = 5f*48;
+	public final static float SEPERATION5 = 6.5f*48;
+	public final static float BUS_Y_LOCATION1 = 432f;
+	public final static float BUS_Y_LOCATION2 = 480f;
+	public final static float BUS_Y_LOCATION3 = 528f;
+	public final static float BUS_Y_LOCATION4 = 576f;
+	public final static float BUS_Y_LOCATION5 = 624f;
+	public final static float TILE_LENGTH = 48f;
+	public final static float HALF_TILE_LENGTH = 24f;
+	public final static float EDGE_OF_WATER = 360f;
+	// \/ \/ \/ \/ Cannot use default BoundingBox image dimensions. must reduce size.
+	public final static float BOUNDINGBOX_HEIGHT_CONTRACTION_FACTOR = 0.75f;
+	public final static float BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR = 0.75f;
 	
 	//Other Instance Variables also initialized 
 	Image waterTile;
@@ -95,11 +101,11 @@ public class World {
 		//Render Tiles in correct position 
 		for (int i=0 ; i<7 ; i++) {
 			for (int j=0; j<22; j++) {
-				waterTile.drawCentered(24 + j*48, 48+i*48);
+				waterTile.drawCentered(HALF_TILE_LENGTH + j*TILE_LENGTH, TILE_LENGTH+i*TILE_LENGTH);
 			}
 		} for (int i=0; i<22; i++) {
-			grassTile.drawCentered(24 + i*48, 384);
-			grassTile.drawCentered(24 + 48*i, 672);
+			grassTile.drawCentered(HALF_TILE_LENGTH + i*TILE_LENGTH, 384);
+			grassTile.drawCentered(HALF_TILE_LENGTH + i*TILE_LENGTH, 672);
 		}
 		
 		// Draw all of the sprites in the game
