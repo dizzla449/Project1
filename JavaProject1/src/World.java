@@ -30,7 +30,9 @@ public class World {
 	public final static float HALF_TILE_LENGTH = 24f;
 	public final static float EDGE_OF_WATER = 360f;
 	// \/ \/ \/ \/ Cannot use default BoundingBox image dimensions. must reduce size.
+	//width = img.getHeight()*World.BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR;
 	public final static float BOUNDINGBOX_HEIGHT_CONTRACTION_FACTOR = 0.75f;
+	//width = img.getWidth()*World.BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR;
 	public final static float BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR = 0.75f;
 	
 	//Other Instance Variables also initialized 
