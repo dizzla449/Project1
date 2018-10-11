@@ -3,32 +3,23 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 
 public class World {
 	/*
 	 * CONSTANTS DEFINED BELOW \/ \/ \/ \/
-	 */
-	private final static String WATER_TILE_PATH = "assets/water.png";
-	private final static String GRASS_TILE_PATH = "assets/grass.png";
-	public final static float OFFSET_1 = 48f;
-	public final static float OFFSET_2 = 0f;
-	public final static float OFFSET_3 = 64f;
-	public final static float OFFSET_4 = 128f;
-	public final static float OFFSET_5 = 250f;
-	public final static float SEPERATION1 = 6.5f*48;
-	public final static float SEPERATION2 = 5f*48;
-	public final static float SEPERATION3 = 12f*48;
-	public final static float SEPERATION4 = 5f*48;
-	public final static float SEPERATION5 = 6.5f*48;
-	public final static float BUS_Y_LOCATION1 = 432f;
-	public final static float BUS_Y_LOCATION2 = 480f;
-	public final static float BUS_Y_LOCATION3 = 528f;
-	public final static float BUS_Y_LOCATION4 = 576f;
-	public final static float BUS_Y_LOCATION5 = 624f;
-	public final static float TILE_LENGTH = 48f;
-	public final static float HALF_TILE_LENGTH = 24f;
-	public final static float EDGE_OF_WATER = 360f;
+	*/
+	public static final int TILE_SIZE = 48;
+	
+	private boolean playerAfloat = false;
+	private static World world;
+
 	// \/ \/ \/ \/ Cannot use default BoundingBox image dimensions. must reduce size.
 	//width = img.getHeight()*World.BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR;
 	public final static float BOUNDINGBOX_HEIGHT_CONTRACTION_FACTOR = 0.75f;
@@ -36,83 +27,47 @@ public class World {
 	public final static float BOUNDINGBOX_WIDTH_CONTRACTION_FACTOR = 0.75f;
 	
 	//Other Instance Variables also initialized 
-	Image waterTile;
-	Image grassTile;
-	private ArrayList<Sprite> sprites = new ArrayList<>();
-	
+
+	private ArrayList<Level> levels = new ArrayList<>();
 	
 	public World() {
 		// Perform initialization logic
-		//Background Initialized below
-		try {
-			waterTile = new Image(WATER_TILE_PATH);
-			grassTile = new Image(GRASS_TILE_PATH);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
 		/*
 		 * ALL SPRITES INITIALISED BELOW \/ \/ \/ \/ \/ \/ \/
 		 */
-		// Add Player Sprite first in ArrayList
-		sprites.add(new Player());
-		
-		
-		//Add all 20 Vehicle Sprites to ArrayList
-		for (int i=0; i<4; i++) {
-			sprites.add(new Vehicle(OFFSET_1 + SEPERATION1*i, BUS_Y_LOCATION1));
-		} 
-		for (int i=0; i<5; i++) {
-			sprites.add(new Vehicle(OFFSET_2+i*SEPERATION2, BUS_Y_LOCATION2));
-		} 
-		
-		sprites.add(new Vehicle(OFFSET_3, BUS_Y_LOCATION3));
-		sprites.add(new Vehicle(OFFSET_3 + SEPERATION3, BUS_Y_LOCATION3));
-		
-		for (int i=0; i<5; i++) {
-			sprites.add(new Vehicle(OFFSET_4 + SEPERATION4*i, BUS_Y_LOCATION4));
-		} 
-		for (int i=0; i<4; i++) {
-			sprites.add(new Vehicle(OFFSET_5 + i*SEPERATION5, BUS_Y_LOCATION5));
-		}		
+		levels.add(new Level("assets/levels/0.lvl"));
+		levels.add(new Level("assets/levels/1.lvl"));
+
+		world = this;
 	}
 	
+	public static World getInstance() {
+		if (world == null) {
+			world = new World();
+		}
+		return world;
+	}
 	
 	//Need to update sprites ArrayList for movement and also check for collisions.
 	public void update(Input input, int delta) {
-		// Update all sprites movement.
-		for(Sprite i: sprites) {
-			i.update(input, delta);
-		}
-		
-		//Check player (first element) has collided with any other sprites(vehicles), and if so exit App.
-		for (int i=1; i<sprites.size(); i++) {
-			if (sprites.get(0).contactSprite(sprites.get(i))) {
-				System.exit(0);
+		for (Level level: levels) {
+			if (level.isLevelPassed() == false) {
+				level.update(input, delta);
+				break;
 			}
-		}
-		//Quick escape enabled by with ESCAPE Key
-		if (input.isKeyDown(Input.KEY_ESCAPE)) {
-			System.exit(0);
 		}
 	}
 	
+	public boolean isPlayerAfloat() { return playerAfloat;}
+	public void changePlayerAfloat(boolean Afloat) { playerAfloat = Afloat;}
 	
-	//Iterate through sprite list to render each sprites updated coordinates
 	public void render(Graphics g) {
-		
-		//Render Tiles in correct position 
-		for (int i=0 ; i<7 ; i++) {
-			for (int j=0; j<22; j++) {
-				waterTile.drawCentered(HALF_TILE_LENGTH + j*TILE_LENGTH, TILE_LENGTH+i*TILE_LENGTH);
+		for (Level level: levels) {
+			if (level.isLevelPassed() == false) {
+				level.render(g);
+				break;
 			}
-		} for (int i=0; i<22; i++) {
-			grassTile.drawCentered(HALF_TILE_LENGTH + i*TILE_LENGTH, 384);
-			grassTile.drawCentered(HALF_TILE_LENGTH + i*TILE_LENGTH, 672);
-		}
-		
-		// Draw all of the sprites in the game
-		for(Sprite i: sprites) {
-			i.render();
 		}
 	}
+	
 }
