@@ -3,17 +3,23 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class Level {
 	
 	private ArrayList<Sprite> sprites;
 	private boolean levelPassed = false;
+	private static String[] tile = { "grass", "water", "tree" };
+	Set<String> tiles = new HashSet<String>(Arrays.asList(tile));
 	
 	public Level(String file_path) {
 		sprites = createPlayerAndVehicles(file_path);
@@ -73,7 +79,11 @@ public class Level {
 					int x = Integer.parseInt(data[1]);
 					int y = Integer.parseInt(data[2]);
 					boolean rightwards = Boolean.parseBoolean(data[3]);
-					
+					if (tiles.contains(className)) {
+						className =  data[0].substring(0, 1).toUpperCase() + data[0].substring(1);
+						//Method<?> cc = Method.ge
+						//sprites.add(Method.forName("create"+className+"Tile"));
+					}
 					Class<?> c = Class.forName(className);
 					sprites.add((Sprite)c.getConstructor(new Class[] { float.class, float.class, boolean.class })
 								       .newInstance(new Object[] { x, y, rightwards }));
